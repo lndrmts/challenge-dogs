@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 
-import { FaDog, FaPlus } from 'react-icons/fa';
-import api from './services/api';
-
 // Icons
+import { FaDog, FaPlus, FaSpinner } from 'react-icons/fa';
+
+// Dogs API
+import api from './services/api';
 
 // Styles
 import GlobalStyle from './styles/global';
-import { Container, Form, SubmitButton, List } from './styles/App';
+import {
+  Container,
+  Form,
+  SubmitButton,
+  List,
+  Title,
+  SubTitle,
+  Info,
+  SavedIn,
+} from './styles/App';
 
 function App() {
   const [dogs, setDogs] = useState([]);
-
   const [breeds, setBreeds] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // List all Breeds
   useEffect(() => {
@@ -21,9 +31,25 @@ function App() {
     });
   }, []);
 
-  // Handle Submit
-  const handleSubmit = async e => {
+  // Get LocalStorage List
+  useEffect(() => {
+    const data = localStorage.getItem('dog-list');
+    if (data) {
+      setDogs(JSON.parse(data));
+    }
+  }, []);
+
+  // Set LocalStorage List
+  useEffect(() => {
+    localStorage.setItem('dog-list', JSON.stringify(dogs));
+  }, [dogs]);
+
+  // Handle Submit a new Dog
+  async function handleSubmit(e) {
     e.preventDefault();
+
+    setLoading(true);
+
     const name = e.target.elements.name.value;
     const breed = e.target.elements.breed.value;
     const color = e.target.elements.color.value;
@@ -31,18 +57,20 @@ function App() {
 
     const image = await api.get(`/breed/${breed}/images/random`);
 
+    const date = Date('M D YYYY \n/ HH:MM');
+
     const data = {
       name,
       breed,
       color,
       font,
       url: image.data.message,
+      date,
     };
 
-    setDogs([...dogs, data]);
-
-    console.log(dogs);
-  };
+    setDogs([data, ...dogs]);
+    setLoading(false);
+  }
 
   const colors = [
     { name: 'Purple', color: '#7C4DFF' },
@@ -60,7 +88,7 @@ function App() {
       <Container>
         <h1>
           <FaDog />
-          Dogs
+          Register dog
         </h1>
 
         <Form onSubmit={handleSubmit}>
@@ -89,11 +117,33 @@ function App() {
               </option>
             ))}
           </select>
-          <SubmitButton>
-            <FaPlus color="#FFF" size={14} />
+          <SubmitButton loading={loading}>
+            {loading ? (
+              <FaSpinner color="#FFF" size={14} />
+            ) : (
+              <FaPlus color="#FFF" size={14} />
+            )}
           </SubmitButton>
         </Form>
-        <List />
+        <List>
+          <h1>
+            <FaDog /> Dog List
+          </h1>
+          {dogs ? (
+            dogs.map(dog => (
+              <li key={dog.name}>
+                <img alt={dog.name} src={dog.url} />
+                <Info color={dog.color} font={dog.font}>
+                  <Title>{dog.name}</Title>
+                  <SubTitle>{dog.breed}</SubTitle>
+                  <SavedIn>Saved in: {dog.date}</SavedIn>
+                </Info>
+              </li>
+            ))
+          ) : (
+            <h4>Not found</h4>
+          )}
+        </List>
       </Container>
     </>
   );

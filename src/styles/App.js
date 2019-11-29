@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 export const Container = styled.div`
   max-width: 768px;
@@ -25,7 +25,7 @@ export const Container = styled.div`
 `;
 
 export const Form = styled.form`
-  margin-top: 30px;
+  margin: 30px 0;
   display: flex;
   flex-direction: column;
   input,
@@ -40,9 +40,20 @@ export const Form = styled.form`
     color: #23374d;
   }
 `;
-export const SubmitButton = styled.button.attrs({
+
+const rotate = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+
+`;
+export const SubmitButton = styled.button.attrs(props => ({
   type: 'submit',
-})`
+  disabled: props.loading,
+}))`
   background-color: #23374d;
   border: 0;
   padding: 10px 15px;
@@ -50,8 +61,52 @@ export const SubmitButton = styled.button.attrs({
 
   width: 85px;
   cursor: pointer;
-  :hover {
+  &:hover {
     background-color: #1089ff;
   }
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  ${props =>
+    props.loading &&
+    css`
+      svg {
+        animation: ${rotate} 2s linear infinite;
+      }
+    `}
 `;
-export const List = styled.div``;
+export const List = styled.ul`
+  li {
+    display: flex;
+    margin: 25px 0;
+    + li {
+      border-top: 1px solid #eee;
+      padding-top: 25px;
+    }
+  }
+  img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 25px;
+  }
+`;
+
+export const Info = styled.p`
+  color: ${props => (props.color ? props.color : '#cccccc')};
+  font-family: ${props => (props.font ? props.font : '#cccccc')};
+`;
+export const Title = styled.span`
+  display: flex;
+  font-size: 36px;
+`;
+export const SubTitle = styled.span`
+  display: flex;
+  font-size: 14px;
+`;
+export const SavedIn = styled.small`
+  color: #ccc;
+  font-size: 12px;
+`;
