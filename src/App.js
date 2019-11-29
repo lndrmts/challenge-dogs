@@ -8,6 +8,7 @@ import api from './services/api';
 
 // Styles
 import GlobalStyle from './styles/global';
+
 import {
   Container,
   Form,
@@ -17,12 +18,14 @@ import {
   SubTitle,
   Info,
   SavedIn,
+  Message,
 } from './styles/App';
 
 function App() {
   const [dogs, setDogs] = useState([]);
   const [breeds, setBreeds] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(false);
 
   // List all Breeds
   useEffect(() => {
@@ -70,6 +73,7 @@ function App() {
 
     setDogs([data, ...dogs]);
     setLoading(false);
+    setMessage(true);
   }
 
   const colors = [
@@ -85,7 +89,11 @@ function App() {
   return (
     <>
       <GlobalStyle />
+
       <Container>
+        {message && (
+          <Message>Your new dog has been successfully registered!</Message>
+        )}
         <h1>
           <FaDog />
           Register dog

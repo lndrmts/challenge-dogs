@@ -110,3 +110,13 @@ export const SavedIn = styled.small`
   color: #ccc;
   font-size: 12px;
 `;
+
+export const Message = styled.div`
+  background: lightseagreen;
+  padding: 14px;
+  border-radius: 4px;
+  margin: 25px 0;
+  color: #fff;
+  font-family: Arial;
+  letter-spacing: 1px;
+`;
