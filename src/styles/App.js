@@ -119,4 +119,11 @@ export const Message = styled.div`
   color: #fff;
   font-family: Arial;
   letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  svg {
+    cursor: pointer;
+  }
 `;

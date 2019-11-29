@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Icons
-import { FaDog, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaDog, FaPlus, FaSpinner, FaTimes } from 'react-icons/fa';
 
 // Dogs API
 import api from './services/api';
@@ -92,7 +92,10 @@ function App() {
 
       <Container>
         {message && (
-          <Message>Your new dog has been successfully registered!</Message>
+          <Message>
+            <p>Your new dog has been successfully registered!</p>
+            <FaTimes color="#FFF" size={14} onClick={() => setMessage(false)} />
+          </Message>
         )}
         <h1>
           <FaDog />
